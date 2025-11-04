@@ -1,38 +1,79 @@
-# sv
+# Notes Frontend (Svelte)
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A modern Svelte app for creating, viewing, editing, and deleting personal notes. Styled with the Ocean Professional theme (blue primary with amber accents) and built on SvelteKit.
 
-## Creating a project
+## Quick start
 
-If you're seeing this, you've probably already done this step. Congrats!
+- Install dependencies:
+  npm install
 
-```bash
-# create a new project in the current directory
-npx sv create
+- Start dev server (port 3000, strictPort):
+  npm run dev
 
-# create a new project in my-app
-npx sv create my-app
-```
+- Build:
+  npm run build
 
-## Developing
+- Preview production build:
+  npm run preview
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+The dev server is configured for preview systems on port 3000 with CORS enabled in vite.config.ts.
 
-```bash
-npm run dev
+## Environment variables
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+The app reads the backend API base URL from the following (in order):
+- VITE_API_BASE
+- VITE_BACKEND_URL
 
-## Building
+Set one of these in your .env:
 
-To create a production version of your app:
+VITE_API_BASE=https://your-backend.example.com
 
-```bash
-npm run build
-```
+No URLs are hardcoded in the code. If none are provided, the app will use a relative "/api" path.
 
-You can preview the production build with `npm run preview`.
+Other available envs (predefined in the workspace): VITE_FRONTEND_URL, VITE_WS_URL, VITE_NODE_ENV, VITE_ENABLE_SOURCE_MAPS, VITE_PORT, VITE_TRUST_PROXY, VITE_LOG_LEVEL, VITE_HEALTHCHECK_PATH, VITE_FEATURE_FLAGS, VITE_EXPERIMENTS_ENABLED
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## API expectations
+
+This UI expects a backend with the following endpoints:
+- GET    /notes           -> Note[]
+- POST   /notes           -> Note
+- PUT    /notes/:id       -> Note
+- DELETE /notes/:id       -> { id: string }
+
+Note model:
+{
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+## Features
+
+- Sidebar with search and tag filter
+- Notes list with quick selection
+- Editor with title, content, and tags
+- Create, update, delete actions
+- Optimistic UI for create/update/delete
+- Local storage state persistence (selection, filters, latest notes cache)
+- Loading, empty, and error states
+- Responsive layout
+
+## Style guide
+
+Ocean Professional:
+- Primary: #2563EB
+- Secondary/Accent: #F59E0B
+- Error: #EF4444
+- Background: #f9fafb
+- Surface: #ffffff
+- Text: #111827
+
+Smooth transitions, subtle shadows, and rounded corners are used per the theme guidance.
+
+## Notes
+
+- For production deployments, configure the appropriate SvelteKit adapter if needed.
+- Ensure your backend enables CORS for the frontend origin during development.
